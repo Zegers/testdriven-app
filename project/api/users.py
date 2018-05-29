@@ -35,8 +35,23 @@ def add_user():
             response_object['message'] = f'{email} was added!'
             return jsonify(response_object), 201
         else:
-            #response_object['me']
+            response_object['message'] = 'Sorry, that email already exists.'
             return jsonify(response_object), 400
     except exc.IntegrityError as e:
         db.session.rollback()
         return jsonify(response_object), 400
+
+@users_blueprint.route('/users/<user_id>', methods=['GET'])
+def get_single_user(user_id):
+    """Get single user details"""
+    user = User.query.filter_by(id=user_id).first()
+    response_object = {
+        'status' : 'success',
+        'data' : {
+            'id' : user.id,
+            'username' : user.username,
+            'email' : user.email,
+            'active' : user.active
+        }
+    }
+    return jsonify(response_object), 200
