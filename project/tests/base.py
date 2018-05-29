@@ -11,7 +11,7 @@ class BaseTestCase(TestCase):
         app.config.from_object('project.config.TestingConfig')
         return app
 
-    def sefUp(self):
+    def setUp(self):
         db.create_all()
         db.session.commit()
 
